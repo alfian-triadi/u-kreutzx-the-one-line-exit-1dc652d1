@@ -10,4 +10,9 @@ const LETTER =
   "I hereby resign, effective immediately: I have accepted a position as my cat's full-time staff, with better hours and no meetings.";
 
 mkdirSync("/output", { recursive: true });
+// Gate the brief's own limits before writing: one line, 1-140 chars.
+// Failing loudly here beats shipping a letter the judge would reject.
+if (LETTER.length < 1 || LETTER.length > 140 || LETTER.includes("\n")) {
+  throw new Error(`letter must be one line of 1-140 chars, got ${LETTER.length}`);
+}
 writeFileSync("/output/entry.txt", LETTER, "utf8");
